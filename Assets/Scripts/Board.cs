@@ -8,7 +8,8 @@ public class Board : MonoBehaviour
     [SerializeField]
     private (int width, int height) CellSize = (1, 1);
 
-    private Cell[,] Cells;
+    private Cell[,] _cells;
+    public Cell[,] Cells => _cells;
 
     [SerializeField]
     private GameObject CellPrefab;
@@ -31,7 +32,7 @@ public class Board : MonoBehaviour
 
     public void CreateCells()
     {
-        Cells = new Cell[BoardSize.rows, BoardSize.columns];
+        _cells = new Cell[BoardSize.rows, BoardSize.columns];
         Vector2 pos = new Vector2(-BoardSize.columns / 2, BoardSize.rows / 2);
 
         for (int row = 0; row < BoardSize.rows; row++)
@@ -49,6 +50,7 @@ public class Board : MonoBehaviour
                 Cells[row, column].SetColor(randomColor);
 
                 Cells[row, column].SetPosition(pos);
+                Cells[row, column].SetIndex((row, column));
                 pos.x += CellSize.width;
 
             }

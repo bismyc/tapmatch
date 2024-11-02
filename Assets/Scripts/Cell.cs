@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Cell : MonoBehaviour
 {
+    public Board.CellColor MyColor { get; private set; }
+    public (int row, int col) Index { get; private set; }
 
     public void SetColor(Board.CellColor color)
     {
@@ -10,6 +12,7 @@ public class Cell : MonoBehaviour
 
         if(renderer != null)
         {
+            MyColor = color;
             switch (color)
             {
                 case Board.CellColor.Red:
@@ -38,5 +41,10 @@ public class Cell : MonoBehaviour
     public void SetPosition(Vector2 position)
     {
         transform.position = position;
+    }
+
+    public void SetIndex((int row, int col) index)
+    {
+        Index = index;
     }
 }
