@@ -67,11 +67,14 @@
     <Compile Include="Assets/Scripts/Board.cs" />
     <Compile Include="Assets/Scripts/MatchFinder.cs" />
     <Compile Include="Assets/Scripts/Game.cs" />
+    <Compile Include="Assets/Scripts/RandomWeightedColor.cs" />
     <Compile Include="Assets/Scripts/Item.cs" />
     <Compile Include="Assets/Scripts/Cell.cs" />
+    <Compile Include="Assets/Scripts/ScriptableObjects/GameConfig.cs" />
     <Compile Include="Assets/TutorialInfo/Scripts/Readme.cs" />
     <Compile Include="Assets/Scripts/EventSystem.cs" />
     <Compile Include="Assets/Scripts/CommandInvokerker.cs" />
+    <Compile Include="Assets/Scripts/ScriptableObjects/ColorPalette.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

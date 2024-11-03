@@ -5,7 +5,7 @@ public class Cell : MonoBehaviour
     [SerializeField]
     public (int row, int col) Index { get; private set; }
 
-    public void SetColor(Board.CellColor color)
+    public void SetColor(CellColor color)
     {
         Item item = GetComponentInChildren<Item>();
         UnityEngine.Assertions.Assert.IsNotNull(item, "Item is missing.");

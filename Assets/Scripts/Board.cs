@@ -5,31 +5,28 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
-    [SerializeField]
-    private (int rows, int columns) BoardSize = (7, 7);
-
-    [SerializeField]
-    private (int width, int height) CellSize = (1, 1);
+    private BoardSize BoardSize;
+    private CellSize CellSize;
+    private float ItemFallingSpeed = 6.0f;
+    private float ItemSpawnDelay = 0.25f;
 
     private Cell[,] Cells;
 
     [SerializeField]
     private GameObject CellPrefab;
 
-    public enum CellColor
+    public void Initialise(GameConfig gameConfig)
     {
-        Red,
-        Blue,
-        Green,
-        Yellow,
-        Purple
+        BoardSize = gameConfig.boardSize;
+        CellSize = gameConfig.cellSize;
+        ItemFallingSpeed = gameConfig.itemFallingSpeed;
+        ItemSpawnDelay = gameConfig.itemSpawnDelay;
+
+        Cells = new Cell[BoardSize.rows, BoardSize.columns];
     }
 
-    private System.Random random = new System.Random();
-
-    public void CreateCells()
-    {
-        Cells = new Cell[BoardSize.rows, BoardSize.columns];
+    public void CreateCells(RandomWeightedColor colorScheme)
+    { 
         Vector2 pos = new Vector2(-BoardSize.columns / 2, BoardSize.rows / 2);
 
         for (int row = 0; row < BoardSize.rows; row++)
@@ -40,9 +37,7 @@ public class Board : MonoBehaviour
           
                 Cells[row, column].transform.SetParent(this.transform);
 
-                Array colors = Enum.GetValues(typeof(CellColor));
-
-                CellColor randomColor = (CellColor)colors.GetValue(random.Next(colors.Length));
+                CellColor randomColor = colorScheme.GetColor();
 
                 Cells[row, column].SetColor(randomColor);
 
@@ -84,8 +79,8 @@ public class Board : MonoBehaviour
                     {
                         if (Cells[searchRow, col].GetItem() != null)
                         {
-                            FallCommand fallCommand = new FallCommand(Cells[searchRow, col].GetItem().transform, Cells[row, col].transform, 5.0f);
-             
+                            FallCommand fallCommand = new FallCommand(Cells[searchRow, col].GetItem().transform, Cells[row, col].transform, ItemFallingSpeed);
+
                             Game.CommandInvoker.AddCommand(fallCommand);
                             Cells[searchRow, col].GetItem().transform.SetParent(Cells[row, col].transform);
                             break;
@@ -96,7 +91,7 @@ public class Board : MonoBehaviour
         }
     }
 
-    public IEnumerator SpawnRecycledItems(List<Item> matchedItems)
+    public IEnumerator SpawnRecycledItems(RandomWeightedColor colorScheme, List<Item> matchedItems)
     {
         bool hasScheduledSpawn = false;
         for (int row = BoardSize.rows - 1; row >= 0; row--) // Start from the bottom of each column
@@ -107,22 +102,20 @@ public class Board : MonoBehaviour
                 {
                     Item recycledItem = matchedItems[matchedItems.Count - 1];
                     matchedItems.RemoveAt(matchedItems.Count - 1);
-                    Array colors = System.Enum.GetValues(typeof(CellColor));
 
-                    CellColor randomColor = (CellColor)colors.GetValue(random.Next(colors.Length));
+                    CellColor randomColor = colorScheme.GetColor();
                     recycledItem.SetColor(randomColor);
                     recycledItem.transform.SetParent(Cells[row, col].transform);
-
                     recycledItem.gameObject.SetActive(true);
-                    FallCommand fallCommand = new FallCommand(recycledItem.transform, Cells[row, col].transform, 5.0f);
 
+                    FallCommand fallCommand = new FallCommand(recycledItem.transform, Cells[row, col].transform, ItemFallingSpeed);
                     Game.CommandInvoker.AddCommand(fallCommand);
                     hasScheduledSpawn = true;
                 }
             }
             if(hasScheduledSpawn)
             {
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(ItemSpawnDelay);
                 hasScheduledSpawn = false;
             }
         }

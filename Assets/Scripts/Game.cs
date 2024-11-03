@@ -5,16 +5,20 @@ using UnityEngine;
 public class Game : MonoBehaviour
 {
     [SerializeField]
+    private GameConfig GameConfig;
+
     private Board Board;
+    private MatchFinder MatchFinder;
+    private RandomWeightedColor ColorScheme;
 
     public static EventSystem CustomEventSystem { get; private set; }  
-    public static MatchFinder MatchFinder { get; private set; }
     public static CommandInvoker CommandInvoker { get; private set; }
 
     void Start()
     {
         CustomEventSystem = new EventSystem();
-        MatchFinder = new MatchFinder();
+        MatchFinder = new MatchFinder(GameConfig.minColorsToMatch);
+        ColorScheme = new RandomWeightedColor(GameConfig.colorPalette);
 
         CommandInvoker = GetComponent<CommandInvoker>();
         UnityEngine.Assertions.Assert.IsNotNull(CommandInvoker, "CommandInvoker is missing.");
@@ -22,7 +26,8 @@ public class Game : MonoBehaviour
         Board = GetComponentInChildren<Board>();
         UnityEngine.Assertions.Assert.IsNotNull(Board, "Board is missing.");
 
-        Board.CreateCells();
+        Board.Initialise(GameConfig);
+        Board.CreateCells(ColorScheme);
         CustomEventSystem.RegisterEvent<OnPlayerTapped>(HandleOnPlayerTapped);
     }
 
@@ -31,6 +36,6 @@ public class Game : MonoBehaviour
         List<Item> matchedItems = Board.FindMatchedCells(MatchFinder, eventData.cell);
         Board.DeactivateCells(matchedItems);
         Board.DropItemsToEmptyCells();
-        StartCoroutine(Board.SpawnRecycledItems(matchedItems));
+        StartCoroutine(Board.SpawnRecycledItems(ColorScheme, matchedItems));
     }
 }

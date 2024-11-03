@@ -2,15 +2,21 @@ using System.Collections.Generic;
 
 public class MatchFinder
 {
+    private int MinimumColorsToMatch = 1;
     // Define movement directions for up, down, left, and right
     private static readonly int[] dRow = { -1, 1, 0, 0 };
     private static readonly int[] dCol = { 0, 0, -1, 1 };
+
+    public MatchFinder(int minimumColorsToMatch)
+    {
+        MinimumColorsToMatch = minimumColorsToMatch;
+    }
 
     public List<Item> BreadthFirstSearch(Cell[,] board, Cell startCell)
     {
         int rows = board.GetLength(0);
         int cols = board.GetLength(1);
-        Board.CellColor targetColor = startCell.GetItem().MyColor;
+        CellColor targetColor = startCell.GetItem().MyColor;
         List<Item> matchedItems = new List<Item>();
 
         // Create a set to keep track of visited cells
@@ -46,7 +52,7 @@ public class MatchFinder
                 }
             }
         }
-        if(matchedItems.Count > 1)
+        if(matchedItems.Count > MinimumColorsToMatch)
         {
             return matchedItems;
 
