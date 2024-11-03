@@ -6,12 +6,12 @@ public class MatchFinder
     private static readonly int[] dRow = { -1, 1, 0, 0 };
     private static readonly int[] dCol = { 0, 0, -1, 1 };
 
-    public IReadOnlyList<Cell> BreadthFirstSearch(Cell[,] board, Cell startCell)
+    public List<Item> BreadthFirstSearch(Cell[,] board, Cell startCell)
     {
         int rows = board.GetLength(0);
         int cols = board.GetLength(1);
-        Board.CellColor targetColor = startCell.MyColor;
-        List<Cell> connectedCells = new List<Cell>();
+        Board.CellColor targetColor = startCell.GetItem().MyColor;
+        List<Item> matchedItems = new List<Item>();
 
         // Create a set to keep track of visited cells
         HashSet<Cell> visited = new HashSet<Cell>();
@@ -24,7 +24,7 @@ public class MatchFinder
         while (queue.Count > 0)
         {
             Cell currentCell = queue.Dequeue();
-            connectedCells.Add(currentCell);
+            matchedItems.Add(currentCell.GetItem());
 
             // Check each of the four neighbors
             for (int i = 0; i < 4; i++)
@@ -38,7 +38,7 @@ public class MatchFinder
                     Cell neighborCell = board[newRow, newCol];
 
                     // Only add neighbors that match the color and haven't been visited
-                    if (!visited.Contains(neighborCell) && neighborCell.MyColor == targetColor)
+                    if (!visited.Contains(neighborCell) && neighborCell.GetItem().MyColor == targetColor)
                     {
                         queue.Enqueue(neighborCell);
                         visited.Add(neighborCell); // Mark as visited
@@ -46,8 +46,12 @@ public class MatchFinder
                 }
             }
         }
+        if(matchedItems.Count > 1)
+        {
+            return matchedItems;
 
-        return connectedCells.AsReadOnly();
+        }
+        return new List<Item>();
     }
 
 }

@@ -3,6 +3,8 @@ using UnityEngine;
 public class InputListener : MonoBehaviour
 {
     private Cell Cell;
+    public LayerMask raycastLayerMask;
+
     private void Start()
     {
         Cell = GetComponentInChildren<Cell>();
@@ -11,17 +13,16 @@ public class InputListener : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) // 0 is the left mouse button
+        if (Input.GetMouseButtonDown(0) && !Game.CommandInvoker.HasActiveCommands()) 
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, raycastLayerMask))
             {
                 if (hit.transform == transform)
                 {
-                    
-                    Game.CustomEventSystem.SendEvent<Events.OnPlayerTapped>(new Events.OnPlayerTapped { cell = Cell });
+                    Game.CustomEventSystem.SendEvent(new Events.OnPlayerTapped { cell = Cell });
                 }
             }
         }
