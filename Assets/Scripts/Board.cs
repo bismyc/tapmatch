@@ -6,7 +6,7 @@ using UnityEngine;
 public class Board : MonoBehaviour
 {
     private BoardSize BoardSize;
-    private CellSize CellSize;
+    private int CellSize;
     private float ItemFallingSpeed = 6.0f;
     private float ItemSpawnDelay = 0.25f;
 
@@ -34,7 +34,7 @@ public class Board : MonoBehaviour
             for (int column = 0; column < BoardSize.columns; column++)
             {
                 Cells[row, column] = Instantiate(CellPrefab).GetComponent<Cell>();
-          
+                Cells[row, column].transform.localScale = new Vector3(CellSize, CellSize, CellSize);
                 Cells[row, column].transform.SetParent(this.transform);
 
                 CellColor randomColor = colorScheme.GetColor();
@@ -43,10 +43,10 @@ public class Board : MonoBehaviour
 
                 Cells[row, column].SetPosition(pos);
                 Cells[row, column].SetIndex((row, column));
-                pos.x += CellSize.width;
+                pos.x += CellSize;
 
             }
-            pos.y -= CellSize.height;
+            pos.y -= CellSize;
             pos.x = -BoardSize.columns / 2;
         }
     }

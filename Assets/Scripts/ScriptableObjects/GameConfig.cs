@@ -7,21 +7,17 @@ public struct BoardSize
     public int columns;
 }
 
-[System.Serializable]
-public struct CellSize
-{
-    public int width;
-    public int height;
-}
-
 [CreateAssetMenu(fileName = "NewGameConfig", menuName = "TapMatch/Game Config")]
 public class GameConfig : ScriptableObject
 {
     [Header("Board Settings")]
     public BoardSize boardSize = new BoardSize { rows = 7, columns = 7 };
 
-    [Header("Cell Settings")]
-    public CellSize cellSize = new CellSize { width = 1, height = 1 };
+    [Header("Cell Size")]
+    public int cellSize = 1;
+
+    [Header("Min Colors To Match")]
+    public int minColorsToMatch = 1;
 
     [Header("Color Settings (Can edit runtime)")]
     public ColorPalette colorPalette;
@@ -32,6 +28,4 @@ public class GameConfig : ScriptableObject
     [Header("Spawn Delay In Sec (Can edit runtime)")]
     public float itemSpawnDelay = 0.25f;
 
-    [Header("Min Colors To Match")]
-    public int minColorsToMatch = 1;
 }

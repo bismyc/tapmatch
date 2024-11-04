@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Assets/Scripts/InputListener.cs" />
     <Compile Include="Assets/Scripts/FallCommand.cs" />
+    <Compile Include="Assets/Scripts/CommandInvoker.cs" />
     <Compile Include="Assets/Scripts/ICommand.cs" />
     <Compile Include="Assets/Scripts/Board.cs" />
     <Compile Include="Assets/Scripts/MatchFinder.cs" />
@@ -73,7 +74,6 @@
     <Compile Include="Assets/Scripts/ScriptableObjects/GameConfig.cs" />
     <Compile Include="Assets/TutorialInfo/Scripts/Readme.cs" />
     <Compile Include="Assets/Scripts/EventSystem.cs" />
-    <Compile Include="Assets/Scripts/CommandInvokerker.cs" />
     <Compile Include="Assets/Scripts/ScriptableObjects/ColorPalette.cs" />
   </ItemGroup>
   <ItemGroup>

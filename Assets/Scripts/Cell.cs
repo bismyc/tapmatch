@@ -14,7 +14,6 @@ public class Cell : MonoBehaviour
         {
             item.SetColor(color);
         }
-
     }
 
     public void SetPosition(Vector2 position)
